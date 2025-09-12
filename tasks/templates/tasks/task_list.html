@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Tasks</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<h2 class="text-2xl font-bold mb-6 text-gray-800">Your Tasks</h2>
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for task in tasks %}
+    <div class="bg-white p-5 rounded-lg shadow hover:shadow-md transition">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold {{ task.completed|yesno:'line-through,' }}">
+                {{ task.title }}
+            </h3>
+            {% if task.completed %}
+                <span class="text-green-500 font-semibold text-sm">Completed</span>
+            {% else %}
+                <span class="text-yellow-500 font-semibold text-sm">Pending</span>
+            {% endif %}
+        </div>
+        <p class="text-gray-600 mt-2">{{ task.description }}</p>
+        {% if task.deadline %}
+            <p class="text-gray-400 mt-2 text-sm">Deadline: {{ task.deadline|date:"M d, Y H:i" }}</p>
+        {% endif %}
+        <div class="mt-4 flex justify-end space-x-2">
+            <a href="{% url 'edit_task' task.id %}" 
+               class="text-blue-500 hover:underline text-sm">Edit</a>
+            <a href="{% url 'delete_task' task.id %}" 
+               class="text-red-500 hover:underline text-sm">Delete</a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-gray-500 col-span-full">No tasks yet. Add one to get started!</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

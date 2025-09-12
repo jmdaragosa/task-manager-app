@@ -1,11 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Task Manager</title>
-</head>
-<body>
-    <h1>Hello, user!</h1>
-    <a href="{% url 'login' %}">Log out</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center mt-10">
+    <h2 class="text-3xl font-semibold text-gray-800">Welcome, {{ user.username }}!</h2>
+    <p class="mt-2 text-gray-600">Here’s your dashboard</p>
+
+    <div class="mt-6">
+        <a href="{% url 'task_list' %}"
+           class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-600 transition">
+           View Your Tasks
+        </a>
+    </div>
+</div>
+{% endblock %}
