@@ -1,16 +1,44 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
 <div class="text-center mt-10">
-    <h2 class="text-3xl font-semibold text-gray-800">Welcome, {{ user.username }}!</h2>
-    <p class="mt-2 text-gray-600">Here’s your dashboard</p>
+    <h2 class="text-5xl text-pink-500">Welcome, {{ user.username }}!</h2>
 
-    <div class="mt-6">
+    <div class="mt-10">
         <a href="{% url 'task_list' %}"
-           class="bg-blue-500 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-600 transition">
+           class="bg-white text-pink-500 px-6 py-3 rounded-lg shadow border border-pink-500
+                  hover:bg-pink-500 hover:text-white transition">
            View Your Tasks
         </a>
     </div>
 </div>
+
+<div class="mt-12 grid md:grid-cols-3 gap-6">
+
+    <!-- Feature 1 -->
+    <div class="bg-white/40 backdrop-blur-3xl border border-white/30 rounded-xl p-6 shadow-lg hover:scale-105 transform transition">
+        <h3 class="text-xl font-semibold text-pink-600 mb-2 text-center">Manage Tasks</h3>
+        <p class="mt-6 text-gray-800 text-center">Create, edit, and delete tasks to stay organized and on top of your work.</p>
+        <img src="{% static 'tasks/images/manage-task.jpg' %}" alt="Manage Tasks" class="w-150 h-150 mx-auto mt-4 rounded-md opacity-75">
+    </div>
+
+    <!-- Feature 2 -->
+    <div class="bg-white/40 backdrop-blur-3xl border border-white/30 rounded-xl p-6 shadow-lg hover:scale-105 transform transition">
+        <h3 class="text-xl font-semibold text-pink-600 mb-2 text-center">Track Deadlines</h3>
+        <p class="mt-6 text-gray-800 text-center">Keep track of task deadlines and mark completed tasks to stay productive.</p>
+        <img src="{% static 'tasks/images/deadlines.jpg' %}" alt="Deadlines" class="w-150 h-150 mx-auto mt-4 rounded-md opacity-75">
+    </div>
+
+    <!-- Feature 3 -->
+    <div class="bg-white/40 backdrop-blur-3xl border border-white/30 rounded-xl p-6 shadow-lg hover:scale-105 transform transition">
+        <h3 class="text-xl font-semibold text-pink-600 mb-2 text-center">Stay Focused</h3>
+        <p class="mt-6 text-gray-800 text-center">Prioritize your tasks and focus on what’s important, helping you achieve more every day.</p>
+        <img src="{% static 'tasks/images/focus.jpg' %}" alt="Deadlines" class="w-150 h-150 mx-auto mt-4 rounded-md opacity-75">
+    </div>
+
+</div>
+
 {% endblock %}
