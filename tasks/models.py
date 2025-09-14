@@ -8,5 +8,9 @@ class Task(models.Model):
     deadline = models.DateTimeField(blank=True, null=True)
     completed = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'Task'
+        verbose_name_plural = 'Tasks List'
+
     def __str__(self):
         return self.title

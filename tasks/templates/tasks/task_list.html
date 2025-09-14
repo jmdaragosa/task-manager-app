@@ -2,35 +2,104 @@
 {% block title %}Tasks{% endblock %}
 
 {% block content %}
+
 <h2 class="text-2xl font-bold mb-6 text-gray-800">Your Tasks</h2>
 
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for task in tasks %}
-    <div class="bg-white p-5 rounded-lg shadow hover:shadow-md transition">
-        <div class="flex justify-between items-center">
-            <h3 class="text-lg font-semibold {{ task.completed|yesno:'line-through,' }}">
-                {{ task.title }}
-            </h3>
-            {% if task.completed %}
-                <span class="text-green-500 font-semibold text-sm">Completed</span>
-            {% else %}
-                <span class="text-yellow-500 font-semibold text-sm">Pending</span>
-            {% endif %}
-        </div>
-        <p class="text-gray-600 mt-2">{{ task.description }}</p>
-        {% if task.deadline %}
-            <p class="text-gray-400 mt-2 text-sm">Deadline: {{ task.deadline|date:"M d, Y H:i" }}</p>
-        {% endif %}
-        <div class="mt-4 flex justify-end space-x-2">
-            <a href="{% url 'edit_task' task.id %}" 
-               class="text-blue-500 hover:underline text-sm">Edit</a>
-            <a href="{% url 'delete_task' task.id %}" 
-               class="text-red-500 hover:underline text-sm">Delete</a>
+<div class="flex flex-row gap-6">
+    <div class="flex flex-col gap-4">
+        <form method="POST" action="{% url 'task_list' %}" class="bg-white/60 backdrop-blur-md border border-pink-500 rounded-lg shadow p-4 space-y-3">
+          {% csrf_token %}
+
+          <!-- Task Title -->
+          <input type="text" name="title" placeholder="Task title"
+                 class="w-full px-4 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400">
+
+          <!-- Task Description -->
+          <textarea name="description" rows="2" placeholder="Task description (optional)"
+                    class="w-full px-4 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+
+          <!-- Task Deadline -->
+          <input type="datetime-local" name="deadline"
+                 class="w-full px-4 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-400">
+
+          <!-- Submit Button -->
+          <button type="submit"
+                  class="bg-pink-500 text-white px-4 py-2 rounded-lg shadow hover:bg-pink-600 transition w-full">
+            Add Task
+          </button>
+        </form>
+
+        <div class="bg-white/60 backdrop-blur-md border border-pink-500 rounded-lg shadow p-6 h-dvh">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Calendar</h3>
+            <div id="calendar" class="h-dvh"></div>
         </div>
     </div>
-    {% empty %}
-    <p class="text-gray-500 col-span-full">No tasks yet. Add one to get started!</p>
-    {% endfor %}
+
+    <!-- Task List -->
+    <div class="space-y-4 border w-4/5">
+        {% for task in tasks %}
+            <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
+                <!-- Title -->
+                <h3 class="text-lg font-semibold {% if task.completed %}line-through text-gray-400{% endif %}">
+                    {{ task.title }}
+                </h3>
+
+                <!-- Description -->
+                {% if task.description %}
+                    <p class="text-gray-600">{{ task.description }}</p>
+                {% endif %}
+
+                <!-- Deadline -->
+                {% if task.deadline %}
+                    <p class="text-sm text-red-500 mt-1">
+                        Deadline: {{ task.deadline|date:"M d, Y H:i" }}
+                    </p>
+                {% endif %}
+
+                <!-- Status -->
+                <p class="text-sm mt-2">
+                    Status:
+                    {% if task.completed %}
+                        <span class="text-green-600 font-medium">Completed</span>
+                    {% else %}
+                        <span class="text-yellow-600 font-medium">Pending</span>
+                    {% endif %}
+                </p>
+            </div>
+        {% empty %}
+            <p class="text-gray-500">No tasks yet.</p>
+        {% endfor %}
+    </div>
 </div>
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      height: "90%",
+      events: [
+          {% for task in tasks %}
+            {% if task.deadline %}
+              {
+                title: "{{ task.title|escapejs }}",
+                start: "{{ task.deadline|date:'Y-m-d\\TH:i:s' }}",
+                {% if task.completed %}
+                  color: "#38a169",  // green
+                {% else %}
+                  color: "#e53e3e",  // red
+                {% endif %}
+              },
+            {% endif %}
+          {% endfor %}
+      ]
+    });
+
+    calendar.render();
+  });
+</script>
 {% endblock %}

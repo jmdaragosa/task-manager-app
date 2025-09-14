@@ -10,8 +10,21 @@ def home(request):
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.filter(owner=request.user)
-    return render(request, "tasks/task_list.html", {'tasks': tasks})
+    if request.method == "POST":
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        deadline = request.POST.get("deadline")
+
+        if title:
+            Task.objects.create(
+                owner = request.user,
+                title = title,
+                description = description,
+                deadline = deadline
+            )
+        return redirect("task_list")
+    tasks = Task.objects.filter(owner=request.user).order_by("-deadline")
+    return render(request, "tasks/task_list.html", {"tasks": tasks})
 
 def register(request):
     if request.method == "POST":
