@@ -1,3 +1,5 @@
+from django.http import HttpResponse, HttpResponseForbidden
+
 from .models import Task
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -38,11 +40,19 @@ def register(request):
         form = UserCreationForm()
     return render(request, "registration/register.html", {'form': form})
 
+@login_required
 def toggle_task(request, task_id):
     task = get_object_or_404(Task, id=task_id, owner=request.user)
-
     if request.method == "POST":
         task.completed = not task.completed
         task.save()
-
     return  redirect('task_list')
+
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
+
+    if request.method == "POST":
+        task.delete()
+        return redirect("task_list")
+    else:
+        return HttpResponseForbidden('Not allowed.')
