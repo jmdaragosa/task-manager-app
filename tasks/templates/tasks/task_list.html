@@ -40,9 +40,18 @@
         {% for task in tasks %}
             <div class="bg-white p-4 rounded-lg shadow hover:shadow-lg transition">
                 <!-- Title -->
-                <h3 class="text-lg font-semibold {% if task.completed %}line-through text-gray-400{% endif %}">
-                    {{ task.title }}
-                </h3>
+                <div class="inline-flex items-center space-x-2">
+
+                    <form method="post" action="{% url 'toggle_task' task.id %}">
+                        {% csrf_token %}
+                        <input type="checkbox" class="appearance-none h-5 w-5 border-2 border-gray-500 rounded-full checked:bg-green-500" {% if task.completed %}checked{% endif %} onchange="this.form.submit()">
+                    </form>
+
+                    <h3 class="text-lg font-semibold {% if task.completed %}line-through text-gray-400{% endif %}">
+                        {{ task.title }}
+                    </h3>
+
+                </div>
 
                 <!-- Description -->
                 {% if task.description %}
@@ -72,34 +81,4 @@
     </div>
 </div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      height: "90%",
-      events: [
-          {% for task in tasks %}
-            {% if task.deadline %}
-              {
-                title: "{{ task.title|escapejs }}",
-                start: "{{ task.deadline|date:'Y-m-d\\TH:i:s' }}",
-                {% if task.completed %}
-                  color: "#38a169",  // green
-                {% else %}
-                  color: "#e53e3e",  // red
-                {% endif %}
-              },
-            {% endif %}
-          {% endfor %}
-      ]
-    });
-
-    calendar.render();
-  });
-</script>
 {% endblock %}

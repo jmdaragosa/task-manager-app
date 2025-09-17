@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.shortcuts import get_object_or_404
 
 @login_required
 def home(request):
@@ -36,3 +37,12 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {'form': form})
+
+def toggle_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
+
+    if request.method == "POST":
+        task.completed = not task.completed
+        task.save()
+
+    return  redirect('task_list')
