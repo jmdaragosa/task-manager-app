@@ -3,15 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h2>Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+<body class="bg-pink-200 min-h-screen font-mono flex items-center justify-center">
+    <div class="bg-white/40 backdrop-blur-3xl border border-white/30 rounded-xl p-6 shadow-lg w-96">
+        <h2 class="text-2xl text-pink-500 mb-6 text-center">Sign Up</h2>
 
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="form-label block text-sm font-medium mb-1">Username</label>
+                {{ form.username }}
+            </div>
+
+            <div>
+                <label for="{{ form.email.id_for_label }}" class="form-label block text-sm font-medium mb-1">Email</label>
+                {{ form.email }}
+            </div>
+
+            <div>
+                <label for="{{ form.password1.id_for_label }}" class="form-label block text-sm font-medium mb-1">Enter a password</label>
+                {{ form.password1 }}
+            </div>
+
+            <div>
+                <label for="{{ form.password2.id_for_label }}" class="form-label block text-sm font-medium mb-1">Confirm password</label>
+                {{ form.password2 }}
+            </div>
+
+            <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition">
+                Create account
+            </button>
+        </form>
+
+        <p class="text-sm text-center mt-4">
+            Already have an account? <a href="{% url 'login' %}" class="text-pink-500 hover:underline">Login here</a>
+        </p>
+    </div>
 </body>
 </html>

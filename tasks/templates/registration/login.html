@@ -3,16 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+<body class="bg-pink-200 min-h-screen font-mono flex items-center justify-center">
+    <div class="bg-white/40 backdrop-blur-3xl border border-white/30 rounded-xl p-6 shadow-lg w-96">
+        <h2 class="text-2xl text-pink-500 mb-6 text-center">Login</h2>
 
-        <button type="submit">Login</button>
-    </form>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
 
-    <p>No account? <a href="{% url 'register' %}">Register here</a></p>
+            <div>
+                <label for="{{ form.username.id_for_label }}" class="form-label block text-sm font-medium mb-1">Username</label>
+                {{ form.username }}
+            </div>
+
+            <div>
+                <label for="{{ form.password.id_for_label }}" class="form-label block text-sm font-medium mb-1">Password</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition">
+                Login
+            </button>
+        </form>
+
+        <p class="text-sm text-center mt-4">
+            No account? <a href="{% url 'register' %}" class="text-pink-500 hover:underline">Register here</a>
+        </p>
+    </div>
 </body>
 </html>

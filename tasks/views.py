@@ -1,11 +1,16 @@
 from django.http import HttpResponse, HttpResponseForbidden
 
+from .forms import CustomRegisterForm, CustomLoginForm
 from .models import Task
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    form = CustomLoginForm
 
 @login_required
 def home(request):
@@ -23,7 +28,7 @@ def task_list(request):
                 owner = request.user,
                 title = title,
                 description = description,
-                deadline = deadline
+                deadline = deadline if deadline else None
             )
         return redirect("task_list")
     tasks = Task.objects.filter(owner=request.user).order_by("-deadline")
@@ -31,13 +36,13 @@ def task_list(request):
 
 def register(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect("home")
     else:
-        form = UserCreationForm()
+        form = CustomRegisterForm()
     return render(request, "registration/register.html", {'form': form})
 
 @login_required
