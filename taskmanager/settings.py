@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 import dj_database_url
+from django.db.models.functions import Cast
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*c-+s)y82g+^7or#k&j97b(!r6he(=7m0ls5*_%^5uz6b3i(g#'
+SECRET_KEY = config('SECRET_KEY', default='insecure-dev-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["forelle-taskmanager.onrender.com", "localhost", "127.0.0.1"]
+print('Allowed hosts:', ALLOWED_HOSTS)
 
 # Application definition
 
@@ -82,7 +84,7 @@ WSGI_APPLICATION = 'taskmanager.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://postgres:jmdaragosa19@localhost:5432/taskmanager'
+        default=config('DATABASE_URL', default='postgres://postgres:jmdaragosa19@localhost:5432/taskmanager')
     )
 }
 
