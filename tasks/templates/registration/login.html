@@ -13,13 +13,13 @@
             {% csrf_token %}
 
             <div>
-                <label for="{{ form.username.id_for_label }}" class="form-label block text-sm font-medium mb-1">Username</label>
-                {{ form.username }}
+                <label class="form-label block text-sm font-medium mb-1">Username</label>
+                {{ form.username.as_widget }}
             </div>
 
             <div>
-                <label for="{{ form.password.id_for_label }}" class="form-label block text-sm font-medium mb-1">Password</label>
-                {{ form.password }}
+                <label class="form-label block text-sm font-medium mb-1">Password</label>
+                {{ form.password.as_widget }}
             </div>
 
             <button type="submit" class="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600 transition">

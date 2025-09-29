@@ -13,7 +13,6 @@ class CustomLoginForm(AuthenticationForm):
     }))
 
 
-
 class CustomRegisterForm(UserCreationForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'w-full px-4 py-2 rounded-lg border border-pink-300 bg-white/60 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-400',

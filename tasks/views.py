@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
-    form = CustomLoginForm
+    authentication_form = CustomLoginForm
 
 @login_required
 def home(request):
