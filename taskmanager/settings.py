@@ -9,11 +9,8 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-import os
+
 from pathlib import Path
-from decouple import config
-import dj_database_url
-from django.db.models.functions import Cast
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,17 +20,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='insecure-dev-key')
+SECRET_KEY = 'django-insecure-*c-+s)y82g+^7or#k&j97b(!r6he(=7m0ls5*_%^5uz6b3i(g#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True
 
-ALLOWED_HOSTS = ["forelle-taskmanager.onrender.com", "localhost", "127.0.0.1"]
-print('Allowed hosts:', ALLOWED_HOSTS)
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
-LOGIN_URL = "/login/"
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
 
@@ -83,9 +80,14 @@ WSGI_APPLICATION = 'taskmanager.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='postgres://postgres:jmdaragosa19@localhost:5432/taskmanager')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'taskmanager_db',
+        'USER': 'jmdaragosa',
+        'PASSWORD': 'jmdaragosa19',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 
@@ -124,7 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
