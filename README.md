@@ -73,6 +73,3 @@ A web-based task management application built with **Django** that allows users 
 2. Add search and filtering for tasks.
 3. Responsive UI for mobile devices.
 4. Deploy to a live server (e.g., Heroku, Render).
-
-# License
-This project is open source and available under the MIT License.
